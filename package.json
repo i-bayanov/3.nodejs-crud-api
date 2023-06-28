@@ -4,7 +4,12 @@
   "description": "A simple Node.js server with an in-memory database that can handle `GET`, `POST`, `PUT` and `DELETE` requests",
   "main": "build/index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "start": "node .",
+    "start:prod": "cross-env NODE_ENV_BALANCER=without_balancer webpack --mode production && npm start",
+    "start:dev": "nodemon",
+    "start:multi:dev": "cross-env NODE_ENV_BALANCER=with_balancer nodemon",
+    "start:multi:prod": "cross-env NODE_ENV_BALANCER=with_balancer webpack --mode production && npm start"
   },
   "repository": {
     "type": "git",
