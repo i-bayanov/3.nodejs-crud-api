@@ -23,9 +23,9 @@ export function runPrimary() {
   let server: http.Server;
 
   if (withBalancer) {
-    const workers = getWorkers(mainPort, databasePort);
+    const workerPorts = getWorkers(mainPort, databasePort);
 
-    server = http.createServer(balancerRequestHandler.bind(null, workers));
+    server = http.createServer(balancerRequestHandler.bind(null, workerPorts));
   } else {
     server = http.createServer(serverRequestHandler.bind(null, databasePort));
   }
