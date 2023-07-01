@@ -1,5 +1,6 @@
 {
   "watch": ["src"],
+  "ignore": ["src/__tests__"],
   "ext": "ts, mjs",
   "exec": "ts-node ./src/index.ts"
 }
