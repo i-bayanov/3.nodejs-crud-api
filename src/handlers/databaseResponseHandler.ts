@@ -22,11 +22,13 @@ export function databaseResponseHandler(method: string, response: ServerResponse
       case 'PUT':
         statusCode = 200;
         responseMsg = msg;
+        response.setHeader('Content-Type', 'application/json');
 
         break;
       case 'POST':
         statusCode = 201;
         responseMsg = msg;
+        response.setHeader('Content-Type', 'application/json');
 
         break;
       case 'DELETE':
