@@ -119,6 +119,8 @@ The application responds with a 400 status to requests with other methods, reque
 
 ## 4. Running tests
 
+# **_Application must be running before running tests!!!_**
+
 Command
 
 ```
