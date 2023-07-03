@@ -30,7 +30,10 @@ const clearDataBase = async () => {
 };
 
 describe('Server should perform basic operations', () => {
-  test('should response with an empty array after start', async () => {
+  beforeAll(clearDataBase);
+  afterAll(clearDataBase);
+
+  test('should respond with an empty array after start', async () => {
     const response = await server.get(endpoint);
 
     expect(response.status).toBe(200);
@@ -70,7 +73,7 @@ describe('Server should perform basic operations', () => {
     expect(response.text).toBe('');
   });
 
-  test('should response with an empty array in the end', async () => {
+  test('should respond with an empty array in the end', async () => {
     const response = await server.get(endpoint);
 
     expect(response.status).toBe(200);
@@ -78,12 +81,14 @@ describe('Server should perform basic operations', () => {
   });
 });
 
-describe('Server should response with correct status codes if data provided is invalid', () => {
-  beforeAll(createOneUser);
-
+describe('Server should respond with correct status codes if data provided is invalid', () => {
+  beforeAll(() => {
+    clearDataBase();
+    createOneUser();
+  });
   afterAll(clearDataBase);
 
-  test('should response with status code 404 on non-existing endpoint', async () => {
+  test('should respond with status code 404 on non-existing endpoint', async () => {
     const response1 = await server.get('/some-non/existing/resource');
     expect(response1.statusCode).toBe(404);
     expect(response1.text).toBe('<h1>Error 404 - Not found</h1>');
@@ -93,7 +98,7 @@ describe('Server should response with correct status codes if data provided is i
     expect(response2.text).toBe('<h1>Error 404 - Not found</h1>');
   });
 
-  test('should response with status code 400 if provided userId is invalid', async () => {
+  test('should respond with status code 400 if provided userId is invalid', async () => {
     const urlWithInvalidUserID = endpoint + '/' + 'invalid-user-id';
 
     const responseGET = await server.get(urlWithInvalidUserID);
@@ -109,7 +114,7 @@ describe('Server should response with correct status codes if data provided is i
     expect(responseDELETE.text).toBe('<h1>Error 400 - Invalid UserID</h1>');
   });
 
-  test("should response with status code 404 if user with provided id doesn't exist", async () => {
+  test("should respond with status code 404 if user with provided id doesn't exist", async () => {
     const urlWithNonExisingUserId = endpoint + '/' + uuidv4();
 
     const response = await server.get(urlWithNonExisingUserId);
@@ -125,7 +130,7 @@ describe('Server should response with correct status codes if data provided is i
     expect(responseDELETE.text).toBe('<h1>Error 404 - User not found</h1>');
   });
 
-  test("should response with status code 400 if new user body doesn't contain required fields or invalid", async () => {
+  test("should respond with status code 400 if new user body doesn't contain required fields or invalid", async () => {
     const response1 = await server.post(endpoint).send({ username: 'User', age: 20 });
     expect(response1.statusCode).toBe(400);
     expect(response1.text).toBe('<h1>Error 400 - Invalid request body</h1>');
@@ -135,7 +140,7 @@ describe('Server should response with correct status codes if data provided is i
     expect(response2.text).toBe('<h1>Error 400 - Invalid request body</h1>');
   });
 
-  test("should response with status code 400 if updating user body doesn't contain required fields or invalid", async () => {
+  test("should respond with status code 400 if updating user body doesn't contain required fields or invalid", async () => {
     const response1 = await server
       .put(endpoint + '/' + user.id)
       .send({ username: 'User', age: 21 });
